@@ -2,8 +2,8 @@
 import '../styles/global.css';
 import PacmanBackground from '../components/PacmanBackground.astro';
 
-const pageTitle = "Developer Portfolio | Mohamad Syahmi";
-const name = "Mohamad Syahmi";
+const pageTitle = "Portfolio | Mohamad Syahmi Bin Soria";
+const name = "Syahmi";
 const profileImage = "/6275806174720496304.jpg"; 
 const role = "System Administrator / Network Engineer / Technical Support Engineer";
 const bio = "Network Computing graduate passionate about IT infrastructure, network security, and cloud monitoring. Experienced in proactive system administration and performance optimization. Driven to build and support reliable, low-latency IT operations.";
@@ -42,48 +42,48 @@ function getCategoryIcon(category) {
 
 const education = [
 {
-	degree: "Pre-University Matriculation (Physical Science)",
-	institution: "Labuan Matriculation College (KML)",
-	period: "2020 - 2022"
-}, 
-{
     degree: "Bachelor of Computer Science (Network Computing)",
     institution: "Universiti Malaysia Sarawak (UNIMAS)",
     period: "2022 - 2026",
+},
+{
+	degree: "Pre-University Matriculation (Physical Science)",
+	institution: "Labuan Matriculation College (KML)",
+	period: "2020 - 2022"
 }
 ];
 
 const experience = [
-{
+  {
+    role: "IT Support Specialist (Freelance)",
+    company: "Personal",
+    period: "Present",
+    details: "Providing technical support and troubleshooting for clients, including hardware and software issues. Offering solutions to optimize system performance and ensure smooth IT operations."
+  },
+  {
+    role: "Electrical Technician Assistant (Part-Time)",
+    company: "RICHMI Enterprise",
+    period: "October 2023 - Present",
+    details: "Assisting in electrical installations, maintenance, and troubleshooting. Gained hands-on experience in electrical systems, wiring, and safety protocols while supporting senior technicians in various projects."
+  },
+  {
+    role: "Web Developer (Internship)",
+    company: "Sumpit Kelangit SDN. BHD.",
+    period: "March 2025 - August 2025",
+    details: "Developing and maintaining web applications, ensuring responsive design and user-friendly interfaces. Collaborating with clients to understand requirements and deliver effective web solutions."
+  },
+  {
+    role: "Promoter (Part-Time)",
+    company: "OOPSSTUDIO",
+    period: "September 2023 - September 2023",
+    details: "Promoted and marketed products to customers, enhancing brand visibility and driving sales. Developed communication and interpersonal skills while engaging with diverse customer groups."
+  },
+  {
     role: "Fuel Attendant (Part-Time)",
     company: "SHELL Gas Station",
     period: "August 2023 - September 2023",
     details: "Learning the basics of customer service, cash handling, and fuel station operations. Gained experience in managing transactions, assisting customers, and maintaining a safe and efficient work environment."
-},
-{
-	role: "Promoter (Part-Time)",
-	company: "OOPSSTUDIO",
-	period: "September 2023 - September 2023",
-	details: "Promoted and marketed products to customers, enhancing brand visibility and driving sales. Developed communication and interpersonal skills while engaging with diverse customer groups."
-},
-{
-	role: "Electrical Technician Assistant (Part-Time)",
-	company: "RICHMI Enterprise",
-	period: "October 2023 - Present",
-	details: "Assisting in electrical installations, maintenance, and troubleshooting. Gained hands-on experience in electrical systems, wiring, and safety protocols while supporting senior technicians in various projects."
-},
-{
-	role: "Web Developer (Internship)",
-	company: "Sumpit Kelangit SDN. BHD.",
-	period: "March 2025 - August 2025",
-	details: "Developing and maintaining web applications, ensuring responsive design and user-friendly interfaces. Collaborating with clients to understand requirements and deliver effective web solutions."
-},
-{
-	role: "IT Support Specialist (Freelance)",
-	company: "Personal",
-	period: "Present",
-	details: "Providing technical support and troubleshooting for clients, including hardware and software issues. Offering solutions to optimize system performance and ensure smooth IT operations."
-}
+  }
 ];
 
 const certificates = [
@@ -206,8 +206,8 @@ const contact = {
         
         <button 
         @click="activeTab = 'documents'" 
-        :class="activeTab === 'documents' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'"
-        class="px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-200">
+        :class="activeTab === 'documents' ? 'bg-sky-500/10 text-sky-400 border-sky-500' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'"
+          class="px-4 py-2 text-sm font-medium border rounded-xl transition duration-150 cursor-pointer">
         📁 Documents
         </button>
       </nav>
