@@ -1,0 +1,223 @@
+---
+// src/components/PacmanBackground.astro
+---
+
+<canvas id="pacman-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+
+<script>
+  const canvas = document.getElementById('pacman-canvas') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d')!;
+
+  let width = (canvas.width = window.innerWidth);
+  let height = (canvas.height = window.innerHeight);
+
+  // Tracking State
+  let mouse = { x: -1000, y: -1000, isHovering: false };
+
+  // Detect if the user is on a coarse pointer device (touch screen/mobile)
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+
+  // Only enable tracking if it's NOT a touch device
+  if (!isTouchDevice) {
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      mouse.isHovering = true;
+    });
+
+    document.addEventListener('mouseleave', () => {
+      mouse.isHovering = false;
+    });
+  }
+
+  // --- CONTENT SAFE-ZONE CHECKER ---
+  // Checks if a point (x, y) is inside or too close to the <main> portfolio content
+  function isInsideSafeZone(x: number, y: number, padding = 60) {
+    const mainEl = document.querySelector('main');
+    if (!mainEl) return false;
+
+    const rect = mainEl.getBoundingClientRect();
+    return (
+      x >= rect.left - padding &&
+      x <= rect.right + padding &&
+      y >= rect.top - padding &&
+      y <= rect.bottom + padding
+    );
+  }
+
+  // --- PELLET (FOOD) CLASS ---
+  interface Pellet {
+    x: number;
+    y: number;
+    radius: number;
+  }
+
+  let pellets: Pellet[] = [];
+  const MAX_PELLETS = 12; // Maximum food dots on screen at once
+
+  function spawnPellet() {
+    if (pellets.length >= MAX_PELLETS) return;
+
+    let attempts = 0;
+    let valid = false;
+    let px = 0;
+    let py = 0;
+
+    // Keep looking for a random position outside the content safe-zone
+    while (!valid && attempts < 30) {
+      px = Math.random() * (width - 80) + 40;
+      py = Math.random() * (height - 80) + 40;
+
+      if (!isInsideSafeZone(px, py)) {
+        valid = true;
+      }
+      attempts++;
+    }
+
+    if (valid) {
+      pellets.push({ x: px, y: py, radius: 4 });
+    }
+  }
+
+  // Initial population of pellets
+  for (let i = 0; i < MAX_PELLETS; i++) {
+    spawnPellet();
+  }
+
+  // Continuously spawn new pellets as they get eaten
+  setInterval(spawnPellet, 2000);
+
+  // Handle Resize
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+
+  // --- PAC-MAN ENTITY ---
+  class Pacman {
+    x: number;
+    y: number;
+    radius: number;
+    speed: number;
+    targetX: number;
+    targetY: number;
+    mouthAngle: number;
+    mouthSpeed: number;
+    angle: number;
+
+    constructor() {
+      this.x = width / 2;
+      this.y = height / 2;
+      this.radius = 16;
+      this.speed = 1.0; // Slower, smooth cruising speed
+      this.targetX = width / 4;
+      this.targetY = height / 4;
+      this.mouthAngle = 0.2;
+      this.mouthSpeed = 0.008; // Slower chomp animation
+      this.angle = 0;
+    }
+
+    update() {
+      // 1. CHOOSE TARGET (Mouse or Nearest Food Dot)
+      if (mouse.isHovering) {
+        this.targetX = mouse.x;
+        this.targetY = mouse.y;
+      } else {
+        // If not following mouse, target the closest food pellet
+        if (pellets.length > 0) {
+          let closestDist = Infinity;
+          let closestPellet = pellets[0];
+
+          for (let p of pellets) {
+            let dist = Math.hypot(p.x - this.x, p.y - this.y);
+            if (dist < closestDist) {
+              closestDist = dist;
+              closestPellet = p;
+            }
+          }
+          this.targetX = closestPellet.x;
+          this.targetY = closestPellet.y;
+        } else {
+          // Fallback random wander
+          const distToTarget = Math.hypot(this.targetX - this.x, this.targetY - this.y);
+          if (distToTarget < 30) {
+            this.targetX = Math.random() * (width - 100) + 50;
+            this.targetY = Math.random() * (height - 100) + 50;
+          }
+        }
+      }
+
+      // 2. MOVE TOWARDS TARGET
+      const dx = this.targetX - this.x;
+      const dy = this.targetY - this.y;
+      const dist = Math.hypot(dx, dy);
+
+      if (dist > 5) {
+        this.angle = Math.atan2(dy, dx);
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed;
+      }
+
+      // 3. EAT PELLETS (Collision Check)
+      pellets = pellets.filter((p) => {
+        const pDist = Math.hypot(p.x - this.x, p.y - this.y);
+        return pDist > this.radius; // Keep pellet if Pac-Man hasn't touched it
+      });
+
+      // 4. ANIMATE MOUTH
+      this.mouthAngle += this.mouthSpeed;
+      if (this.mouthAngle > 0.4 || this.mouthAngle < 0.02) {
+        this.mouthSpeed = -this.mouthSpeed;
+      }
+    }
+
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.angle);
+
+      // Yellow Pac-Man Body
+      ctx.beginPath();
+      ctx.arc(
+        0, 
+        0, 
+        this.radius, 
+        this.mouthAngle * Math.PI, 
+        (2 - this.mouthAngle) * Math.PI
+      );
+      ctx.lineTo(0, 0);
+      ctx.fillStyle = '#facc15'; // Retro Yellow
+      ctx.fill();
+      ctx.closePath();
+
+      ctx.restore();
+    }
+  }
+
+  const pacman = new Pacman();
+
+  // --- RENDER LOOP ---
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+
+    // 1. Draw Food Pellets (Glowing Pink/Yellow Dots)
+    for (let p of pellets) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = '#f472b6'; // Arcade Pink Pellet
+      ctx.shadowColor = '#f472b6';
+      ctx.shadowBlur = 6;
+      ctx.fill();
+      ctx.shadowBlur = 0; // Reset blur
+      ctx.closePath();
+    }
+
+    // 2. Update & Draw Pac-Man
+    pacman.update();
+    pacman.draw();
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+</script>
