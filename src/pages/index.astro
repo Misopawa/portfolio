@@ -203,6 +203,13 @@ const contact = {
           class="px-4 py-2 text-sm font-medium border rounded-xl transition duration-150 cursor-pointer">
           📜 Certificates
         </button>
+        
+        <button 
+        @click="activeTab = 'documents'" 
+        :class="activeTab === 'documents' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'"
+        class="px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-200"></button>
+        📁 Documents
+        </button>
       </nav>
 
       <!-- TAB CONTENT AREA -->
@@ -322,6 +329,69 @@ const contact = {
               </span>
             </div>
           ))}
+        </div>
+
+        <!-- 5. DOCUMENTS TAB -->
+        <div x-show="activeTab === 'documents'" class="space-y-4" x-cloak>
+          
+          <!-- Document Item: Resume / CV -->
+          <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 flex justify-between items-center flex-wrap gap-4 transition hover:border-slate-700">
+            <div class="flex items-start gap-4">
+              <div class="p-3 bg-sky-950/60 border border-sky-800/50 rounded-xl text-sky-400">
+                <!-- Document Text Icon -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-slate-100">Curriculum Vitae / Resume</h3>
+                <p class="text-slate-400 text-sm mt-1">Detailed breakdown of technical projects, experience, and skills.</p>
+              </div>
+            </div>
+
+            <a 
+              href={`${import.meta.env.BASE_URL}/MOHAMAD SYAHMI BIN SORIA (RESUME).pdf`} 
+              download 
+              target="_blank"
+              class="inline-flex items-center gap-2 text-xs font-mono font-medium text-sky-400 bg-sky-950/60 border border-sky-800/50 hover:bg-sky-900/60 hover:text-sky-300 px-4 py-2.5 rounded-xl transition"
+            >
+              <!-- Download Arrow Icon -->
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+              </svg>
+              Download PDF
+            </a>
+          </div>
+
+          <!-- Document Item: Academic Transcript / Certificate -->
+          <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 flex justify-between items-center flex-wrap gap-4 transition hover:border-slate-700">
+            <div class="flex items-start gap-4">
+              <div class="p-3 bg-sky-950/60 border border-sky-800/50 rounded-xl text-sky-400">
+                <!-- Academic Badge Icon -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-slate-100">Academic Transcript</h3>
+                <p class="text-slate-400 text-sm mt-1">Official university academic record and course completions.</p>
+              </div>
+            </div>
+
+            <a 
+              href={`${import.meta.env.BASE_URL}/MOHAMAD SYAHMI BIN SORIA (ACADEMIC TRANSCRIPT).pdf`} 
+              download 
+              target="_blank"
+              class="inline-flex items-center gap-2 text-xs font-mono font-medium text-sky-400 bg-sky-950/60 border border-sky-800/50 hover:bg-sky-900/60 hover:text-sky-300 px-4 py-2.5 rounded-xl transition"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+              </svg>
+              Download PDF
+            </a>
+          </div>
+
         </div>
 
       </section>
